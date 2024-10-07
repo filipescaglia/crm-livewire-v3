@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Auth\Register;
+use App\Models\User;
 use Livewire\Livewire;
 
 use function Pest\Laravel\{assertDatabaseCount, assertDatabaseHas};
@@ -41,3 +42,13 @@ test('validation rules', function ($f) {
     'email::confirmed'   => (object) ['field' => 'email', 'value' => 'john@doe.com', 'rule' => 'confirmed'],
     'password::required' => (object) ['field' => 'password', 'value' => '', 'rule' => 'required'],
 ]);
+
+test('email should be unique', function () {
+    User::factory()->create(['email' => 'john@doe.com']);
+
+    Livewire::test(Register::class)
+        ->set('email', 'john@doe.com')
+        ->set('email_confirmation', 'john@doe.com')
+        ->call('submit')
+        ->assertHasErrors(['email' => 'unique']);
+});
