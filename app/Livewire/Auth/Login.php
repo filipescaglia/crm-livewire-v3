@@ -8,13 +8,14 @@ use Livewire\Component;
 
 class Login extends Component
 {
-    public ?string $email;
+    public ?string $email = null;
 
-    public ?string $password;
+    public ?string $password = null;
 
     public function render()
     {
-        return view('livewire.auth.login');
+        return view('livewire.auth.login')
+            ->layout('components.layouts.guest');
     }
 
     public function tryToLogin(): void
@@ -23,6 +24,8 @@ class Login extends Component
             $this->addError('rateLimiter', trans('auth.throttle', [
                 'seconds' => RateLimiter::availableIn($this->throttleKey()),
             ]));
+
+            return;
         }
 
         if (!Auth::attempt(['email' => $this->email, 'password' => $this->password])) {
