@@ -4,7 +4,7 @@ namespace App\Livewire\Auth\Password;
 
 use App\Models\User;
 use App\Notifications\PasswordRecoveryNotification;
-use Livewire\Attributes\Rule;
+use Livewire\Attributes\{Layout, Rule};
 use Livewire\Component;
 
 class Recovery extends Component
@@ -14,6 +14,7 @@ class Recovery extends Component
 
     public string $message;
 
+    #[Layout('components.layouts.guest')]
     public function render()
     {
         return view('livewire.auth.password.recovery');
