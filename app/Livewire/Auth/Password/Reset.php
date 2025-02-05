@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\{DB, Hash, Password};
 use Illuminate\Support\Str;
-use Livewire\Attributes\{Layout, Rule};
+use Livewire\Attributes\{Computed, Layout, Rule};
 use Livewire\Component;
 
 class Reset extends Component
@@ -51,6 +51,12 @@ class Reset extends Component
         }
 
         return true;
+    }
+
+    #[Computed]
+    public function obfuscatedEmail(): string
+    {
+        return obfuscate_email($this->email);
     }
 
     public function updatePassword()
