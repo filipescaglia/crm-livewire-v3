@@ -6,22 +6,24 @@ use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\{DB, Hash, Password};
 use Illuminate\Support\Str;
-use Livewire\Attributes\Layout;
+use Livewire\Attributes\{Layout, Rule};
 use Livewire\Component;
 
 class Reset extends Component
 {
-    public string $token;
+    public ?string $token = null;
 
+    #[Rule(['required', 'email', 'confirmed'])]
     public ?string $email = null;
 
     public ?string $email_confirmation = null;
 
+    #[Rule(['required', 'confirmed'])]
     public ?string $password = null;
 
     public ?string $password_confirmation = null;
 
-    public function mount(string $token, ?string $email = null)
+    public function mount(?string $token = null, ?string $email = null)
     {
         $this->token = $token;
         $this->email = request()->get('email', $email);
@@ -53,6 +55,8 @@ class Reset extends Component
 
     public function updatePassword()
     {
+        $this->validate();
+
         $status = Password::reset(
             $this->only(
                 'email',
