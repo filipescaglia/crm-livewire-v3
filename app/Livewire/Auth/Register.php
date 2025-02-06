@@ -4,8 +4,8 @@ namespace App\Livewire\Auth;
 
 use App\Models\User;
 use App\Notifications\WelcomeNotification;
-use Illuminate\Support\Facades\Hash;
-use Livewire\Attributes\Rule;
+use Illuminate\Support\Facades\{Auth, Hash};
+use Livewire\Attributes\{Layout, Rule};
 use Livewire\Component;
 
 class Register extends Component
@@ -21,10 +21,10 @@ class Register extends Component
     #[Rule(['required'])]
     public ?string $password = null;
 
+    #[Layout('components.layouts.guest')]
     public function render()
     {
-        return view('livewire.auth.register')
-            ->layout('components.layouts.guest');
+        return view('livewire.auth.register');
     }
 
     public function submit(): void
@@ -37,7 +37,7 @@ class Register extends Component
             'password' => Hash::make($this->password),
         ]);
 
-        auth()->login($user);
+        Auth::login($user);
 
         $user->notify(new WelcomeNotification());
 
