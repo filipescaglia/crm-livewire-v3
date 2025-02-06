@@ -1,3 +1,24 @@
-<div>
-    {{-- The best athlete wants his opponent at his best. --}}
-</div>
+<x-card title="Password reset" shadown class="mx-auto w-[450px]">
+    @if($message = session()->get('status'))
+        <x-alert icon="o-exclamation-triangle" class="alert-error mb-4">
+            {{ $message }}
+        </x-alert>
+    @endif
+
+    <x-form wire:submit="updatePassword">
+        <x-input label="Email" value="{{ $this->obfuscatedEmail }}" readonly />
+        <x-input label="Email Confirmation" wire:model="email_confirmation" />
+        <x-input label="Password" wire:model="password" type="password" />
+        <x-input label="Password Confirmation" wire:model="password_confirmation" type="password" />
+    
+        <x-slot:actions>
+            <div class="w-full flex items-center justify-between">
+                <a wire:navigate href="{{ route('login') }}" class="link-primary">
+                    Never mind, get back to login page.
+                </a>
+
+                <x-button label="Reset" class="btn-primary" type="submit" spinner="submit" />
+            </div>
+        </x-slot:actions>
+    </x-form>
+</x-card>

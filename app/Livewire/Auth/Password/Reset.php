@@ -6,19 +6,19 @@ use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\{DB, Hash, Password};
 use Illuminate\Support\Str;
-use Livewire\Attributes\{Computed, Layout, Rule};
+use Livewire\Attributes\{Computed, Layout, Validate};
 use Livewire\Component;
 
 class Reset extends Component
 {
     public ?string $token = null;
 
-    #[Rule(['required', 'email', 'confirmed'])]
+    #[Validate(['required', 'email', 'confirmed'])]
     public ?string $email = null;
 
     public ?string $email_confirmation = null;
 
-    #[Rule(['required', 'confirmed'])]
+    #[Validate(['required', 'confirmed'])]
     public ?string $password = null;
 
     public ?string $password_confirmation = null;
@@ -81,6 +81,10 @@ class Reset extends Component
 
         session()->flash('status', trans($status));
 
-        $this->redirect(route('dashboard'));
+        if ($status !== Password::PASSWORD_RESET) {
+            return;
+        }
+
+        $this->redirect(route('login'));
     }
 }

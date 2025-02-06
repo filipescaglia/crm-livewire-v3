@@ -1,8 +1,16 @@
 <?php
 
-function obfuscate_email(string $email): string
+function obfuscate_email(?string $email = null): string
 {
+    if (!$email) {
+        return '';
+    }
+
     $parts = explode('@', $email);
+
+    if (sizeof($parts) !== 2) {
+        return '';
+    }
 
     $obsfucateCount = fn (string $val) => (int) floor(strlen($val) * 0.75);
 
